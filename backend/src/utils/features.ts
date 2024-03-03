@@ -2,9 +2,9 @@ import mongoose from "mongoose"
 import { myCache } from "../app.js";
 import { InvalidateCacheProps } from "../types/types.js";
 
-const MONGO_URL = "mongodb://0.0.0.0:27017";
-export const connectDB = () => {
-    mongoose.connect(MONGO_URL, {
+
+export const connectDB = (uri: string) => {
+    mongoose.connect(uri, {
         dbName: "Ecommerce_24",
     }).then(c => console.log(`connected to DB to  ${c.connection.host}`)).catch(error => console.log(error));
 };

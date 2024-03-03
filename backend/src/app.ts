@@ -2,21 +2,29 @@ import express from "express";
 import { connectDB } from "./utils/features.js";
 import { errorMiddleware } from "./middlewares/error.js";
 import NodeCache from "node-cache";
-
+import { config } from "dotenv";
+import morgan from "morgan";
 
 
 // importing routes 
 import userRoute from "./routes/user.js";
 import productRoute from "./routes/products.js";
-const port = 8000;
 
-connectDB();
+config({
+    path: "./.env",
+})
+
+const port = process.env.PORT || 8000;
+const MONGO_URL = process.env.mongoURL || "";
+connectDB(MONGO_URL);
 
 export const myCache = new NodeCache();
 
 const app = express();
 
 app.use(express.json());
+app.use(morgan("dev"));
+
 
 app.get("/", (req, res) => {
     res.send("API Working ...");
