@@ -1,38 +1,42 @@
-import { FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { FaTrash } from "react-icons/fa";
+import { server } from "../redux/store";
+import { CartItem } from "../types/types";
 
 type CartItemProps = {
-    cartItem: any;
+  cartItem: CartItem;
+  incrementHandler: (cartItem: CartItem) => void;
+  decrementHandler: (cartItem: CartItem) => void;
+  removeHandler: (id: string) => void;
 };
 
-// productId: "ads",
-// photo: "https://c4.wallpaperflare.com/wallpaper/615/132/869/anime-girl-anime-art-cute-kawaii-wallpaper-preview.jpg",
-// name: "macbook",
-// price: 3000,
-// quantity: 4,
-// stock: 10,
-const CartItem = ({ cartItem }: CartItemProps) => {
-    const { photo, price, productId, name, quantity } = cartItem
-    return (
-        <div className="cart-item">
-            <img src={photo} alt={name} />
-            <article
-            >
-                <Link to={`/product/${productId}`}>{name}</Link>
-                <span>₹{price}</span>
-            </article>
+const CartItem = ({
+  cartItem,
+  incrementHandler,
+  decrementHandler,
+  removeHandler,
+}: CartItemProps) => {
+  const { photo, productId, name, price, quantity } = cartItem;
 
-            <div>
-                <button>-</button>
-                <p>{quantity}</p>
-                <button>+</button>
-            </div>
-            <button>
-                <FaTrash />
-            </button>
+  return (
+    <div className="cart-item">
+      <img src={`${server}/${photo}`} alt={name} />
+      <article>
+        <Link to={`/product/${productId}`}>{name}</Link>
+        <span>₹{price}</span>
+      </article>
 
-        </div>
-    )
-}
+      <div>
+        <button onClick={() => decrementHandler(cartItem)}>-</button>
+        <p>{quantity}</p>
+        <button onClick={() => incrementHandler(cartItem)}>+</button>
+      </div>
 
-export default CartItem
+      <button onClick={() => removeHandler(productId)}>
+        <FaTrash />
+      </button>
+    </div>
+  );
+};
+
+export default CartItem;
